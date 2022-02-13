@@ -27,7 +27,7 @@ dependencies {
 group = "ru.gosarhro"
 version = "1.0.0"
 description = "SRRA_requests"
-java.sourceCompatibility = JavaVersion.VERSION_1_9
+java.sourceCompatibility = JavaVersion.VERSION_11
 
 publishing {
     publications.create<MavenPublication>("maven") {
