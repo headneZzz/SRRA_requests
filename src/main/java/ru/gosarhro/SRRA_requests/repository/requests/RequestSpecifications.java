@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class RequestSpecifications {
 
     public static Specification<Request> hasId(Integer id) {
-        return (Specification<Request>) (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("id"), id);
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("id"), id);
     }
 
     public static Specification<Request> hasOutNumber(Integer outNumber) {

@@ -20,9 +20,7 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(
         entityManagerFactoryRef = "personalEntityManagerFactory",
         transactionManagerRef = "personalTransactionManager",
-        basePackages = {
-                "ru.gosarhro.SRRA_requests.repository.personal_data"
-        }
+        basePackages = "ru.gosarhro.SRRA_requests.repository.personal_data"
 )
 public class PersonalDataConfig {
 
@@ -35,7 +33,7 @@ public class PersonalDataConfig {
     @Bean(name = "personalEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean personalEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
-            @Qualifier("personalDataSource") DataSource dataSource){
+            @Qualifier("personalDataSource") DataSource dataSource) {
         return
                 builder
                         .dataSource(dataSource)

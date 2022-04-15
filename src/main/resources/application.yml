@@ -1,13 +1,13 @@
 spring:
   datasource:
-    jdbc-url: jdbc:postgresql://localhost:5432/archive
+    jdbc-url: ${SPRING_DATASOURCE_JDBC_URL_ARCHIVE:jdbc:postgresql://localhost:5433/archive}
     username: postgres
     password: password
 
   personal-datasource:
-    jdbc-url: jdbc:postgresql://localhost:5432/personal
-    password: password
+    jdbc-url: ${SPRING_DATASOURCE_JDBC_URL_PERSONAL:jdbc:postgresql://localhost:5434/personal}
     username: postgres
+    password: password
 
   jpa:
     generate-ddl: true

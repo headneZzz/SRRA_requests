@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  srra:
+    build: .
+    container_name: srra
+    environment:
+      SPRING_DATASOURCE_JDBC_URL_ARCHIVE: jdbc:postgresql://db_archive:5432/archive
+      SPRING_DATASOURCE_JDBC_URL_PERSONAL: jdbc:postgresql://db_personal:5432/personal
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - db_archive
+      - db_personal
+  db_archive:
+    image: postgres:14.2-alpine
+    container_name: db_archive
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=archive
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgarchive:/var/lib/postgresql/data
+    restart: always
+
+  db_personal:
+    image: postgres:14.2-alpine
+    container_name: db_personal
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=personal
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgpersonal:/var/lib/postgresql/data
+    restart: always
+volumes:
+  pgarchive:
+  pgpersonal:

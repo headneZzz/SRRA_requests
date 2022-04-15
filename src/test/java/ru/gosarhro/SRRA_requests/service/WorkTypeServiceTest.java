@@ -1,32 +1,33 @@
 package ru.gosarhro.SRRA_requests.service;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
-import static ru.gosarhro.SRRA_requests.TestData.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static ru.gosarhro.SRRA_requests.TestData.DIG;
+import static ru.gosarhro.SRRA_requests.TestData.THROW;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @Sql(scripts = "classpath:db/populateDB.sql")
-public class WorkTypeServiceTest {
+class WorkTypeServiceTest {
 
     @Autowired
     private WorkTypeService service;
 
     @Test
-    public void getById() {
-        Assert.assertEquals(THROW, service.getById(2));
+    void getById() {
+        assertEquals(THROW, service.getById(2));
     }
 
     @Test
-    public void getAll() {
-        Assert.assertEquals(List.of(DIG, THROW), service.getAll());
+    void getAll() {
+        assertEquals(List.of(DIG, THROW), service.getAll());
     }
 }

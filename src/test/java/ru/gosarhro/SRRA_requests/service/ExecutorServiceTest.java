@@ -1,42 +1,41 @@
 package ru.gosarhro.SRRA_requests.service;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.gosarhro.SRRA_requests.entity.requests.Executor;
-
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.gosarhro.SRRA_requests.TestData.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @Sql(scripts = "classpath:db/populateDB.sql")
-public class ExecutorServiceTest {
+class ExecutorServiceTest {
 
     @Autowired
     private ExecutorService service;
 
     @Test
-    public void save() {
+    void save() {
         Executor newExecutor = new Executor(null, "Тест", false, "Тест", "000-00-00", "test@gosarhro.ru");
         Executor addedExecutor = service.save(newExecutor);
         newExecutor.setId(addedExecutor.getId());
-        Assert.assertEquals(List.of(EXECUTOR_A, EXECUTOR_B, EXECUTOR_V, newExecutor), service.getAll());
+        assertEquals(List.of(EXECUTOR_A, EXECUTOR_B, EXECUTOR_V, newExecutor), service.getAll());
     }
 
     @Test
-    public void getById() {
-        Assert.assertEquals(EXECUTOR_A, service.getById(2));
+    void getById() {
+        assertEquals(EXECUTOR_A, service.getById(2));
     }
 
     @Test
-    public void getAll() {
-        Assert.assertEquals(List.of(EXECUTOR_A, EXECUTOR_B, EXECUTOR_V), service.getAll());
+    void getAll() {
+        assertEquals(List.of(EXECUTOR_A, EXECUTOR_B, EXECUTOR_V), service.getAll());
     }
 }

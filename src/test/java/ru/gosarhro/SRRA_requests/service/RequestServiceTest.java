@@ -1,34 +1,34 @@
 package ru.gosarhro.SRRA_requests.service;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.gosarhro.SRRA_requests.entity.requests.Request;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.gosarhro.SRRA_requests.TestData.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @Sql(scripts = "classpath:db/populateDB.sql")
-public class RequestServiceTest {
+class RequestServiceTest {
 
 
     @Autowired
     private RequestService service;
 
     @Test
-    public void getById() {
-        Assert.assertEquals(REQUEST4, service.getById(4));
+    void getById() {
+        assertEquals(REQUEST4, service.getById(4));
     }
 
     @Test
-    public void getAll() {
+    void getAll() {
         List<Request> expectedRequests = List.of(
                 REQUEST1,
                 REQUEST2,
@@ -39,11 +39,11 @@ public class RequestServiceTest {
                 REQUEST7,
                 REQUEST8
         );
-        Assert.assertEquals(expectedRequests, service.getAll());
+        assertEquals(expectedRequests, service.getAll());
     }
 
 //    @Test
-//    public void getAllOrderedByIdDesc() {
+//    void getAllOrderedByIdDesc() {
 //        List<Request> expectedRequests = List.of(
 //                REQUEST8,
 //                REQUEST7,
@@ -55,6 +55,6 @@ public class RequestServiceTest {
 //                REQUEST1
 //        );
 //
-//        Assert.assertEquals(expectedRequests, service.getAllOrderedByIdDesc());
+//        assertEquals(expectedRequests, service.getAllOrderedByIdDesc());
 //    }
 }
