@@ -2,9 +2,8 @@ package ru.gosarhro.SRRA_requests.entity.requests;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
-
-import static java.math.BigDecimal.ROUND_HALF_UP;
 
 @Entity
 @Table(name = "prices")
@@ -32,7 +31,7 @@ public class WorkType {
         this.id = id;
         this.name = name;
         this.unit = unit;
-        this.price = (new BigDecimal(price)).setScale(2,ROUND_HALF_UP );
+        this.price = (new BigDecimal(price)).setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override

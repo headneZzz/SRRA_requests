@@ -34,12 +34,11 @@ public class PersonalDataConfig {
     public LocalContainerEntityManagerFactoryBean personalEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
             @Qualifier("personalDataSource") DataSource dataSource) {
-        return
-                builder
-                        .dataSource(dataSource)
-                        .packages("ru.gosarhro.SRRA_requests.entity.personal_data")
-                        .persistenceUnit("personal")
-                        .build();
+        return builder
+                .dataSource(dataSource)
+                .packages("ru.gosarhro.SRRA_requests.entity.personal_data")
+                .persistenceUnit("personal")
+                .build();
     }
 
     @Bean(name = "personalTransactionManager")

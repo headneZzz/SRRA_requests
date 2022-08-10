@@ -1,19 +1,19 @@
 package ru.gosarhro.SRRA_requests.entity.requests;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "payments")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Payment {
 
+    @Transient
     public static final Payment EMPTY_PAYMENT = new Payment(4, "");
 
     @Id

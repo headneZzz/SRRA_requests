@@ -39,7 +39,7 @@ public class RequestMapper {
             requestDto.setChangeable(false);
         }
         if (request.getReceiptDate() != null) {
-            Long daysLeft = DAYS.between(LocalDate.now(), request.getReceiptDate()) + 30;
+            long daysLeft = DAYS.between(LocalDate.now(), request.getReceiptDate()) + 30;
             requestDto.setDaysLeft(daysLeft);
             requestDto.setExpired(daysLeft <= 0);
         }

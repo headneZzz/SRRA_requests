@@ -1,9 +1,6 @@
 package ru.gosarhro.SRRA_requests.entity.requests;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -15,6 +12,7 @@ import java.util.Objects;
 @Table(name = "requests")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Request {
@@ -209,33 +207,5 @@ public class Request {
     @Override
     public int hashCode() {
         return Objects.hash(id, rubric, theme, subject, shortRequest, shortAnswer, source, urgent, GPW, entity, consular, receiver, receiptDate, startDate, executor, endDate, smav, outNumber, inNumFromOrg, inDate, copyNumber, payment);
-    }
-
-    @Override
-    public String toString() {
-        return "Request{" +
-                "id=" + id +
-                ", rubric=" + rubric +
-                ", theme=" + theme +
-                ", subject='" + subject + '\'' +
-                ", shortRequest='" + shortRequest + '\'' +
-                ", shortAnswer='" + shortAnswer + '\'' +
-                ", source=" + source +
-                ", urgent=" + urgent +
-                ", GPW=" + GPW +
-                ", entity=" + entity +
-                ", consular=" + consular +
-                ", receiver=" + receiver +
-                ", receiptDate=" + receiptDate +
-                ", startDate=" + startDate +
-                ", executor=" + executor +
-                ", endDate=" + endDate +
-                ", smav=" + smav +
-                ", outNumber=" + outNumber +
-                ", inNumFromOrg='" + inNumFromOrg + '\'' +
-                ", inDate=" + inDate +
-                ", copyNumber=" + copyNumber +
-                ", payment=" + payment +
-                '}';
     }
 }

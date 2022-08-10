@@ -1,12 +1,23 @@
 package ru.gosarhro.SRRA_requests.entity.requests;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.Hibernate;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "sources")
 public class Source {
 
+    @Transient
     public static final Source EMPTY_SOURCE = new Source(27, "");
 
     @Id
@@ -18,41 +29,20 @@ public class Source {
     @Column(name = "sources")
     private String name;
 
-    public Source() {
-    }
-
-    public Source(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+            return false;
+        }
         Source source = (Source) o;
-        return id.equals(source.id) &&
-                name.equals(source.name);
+        return id != null && Objects.equals(id, source.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return getClass().hashCode();
     }
 }
