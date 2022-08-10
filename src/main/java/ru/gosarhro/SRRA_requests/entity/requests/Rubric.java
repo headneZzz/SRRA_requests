@@ -1,12 +1,23 @@
 package ru.gosarhro.SRRA_requests.entity.requests;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.Hibernate;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "rubrics")
 public class Rubric {
 
+    @Transient
     public static final Rubric EMPTY_RUBRIC = new Rubric(29, "", "");
 
     @Id
@@ -21,51 +32,20 @@ public class Rubric {
     @Column(name = "rubric")
     private String name;
 
-    public Rubric() {
-    }
-
-    public Rubric(Integer id, String rubric, String name) {
-        this.id = id;
-        this.rubric = rubric;
-        this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getRubric() {
-        return rubric;
-    }
-
-    public void setRubric(String rubric) {
-        this.rubric = rubric;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Rubric rubric1 = (Rubric) o;
-        return id.equals(rubric1.id) &&
-                rubric.equals(rubric1.rubric) &&
-                name.equals(rubric1.name);
+        if (this == o) {
+            return true;
+        }
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+            return false;
+        }
+        Rubric rubric = (Rubric) o;
+        return id != null && Objects.equals(id, rubric.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, rubric, name);
+        return getClass().hashCode();
     }
 }
