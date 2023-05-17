@@ -2,7 +2,9 @@ package ru.gosarhro.SRRA_requests.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,8 +30,6 @@ import java.util.stream.Collectors;
 public class RequestService {
 
     private static final int BUTTONS_TO_SHOW = 5;
-    private static final int INITIAL_PAGE = 0;
-    private static final int INITIAL_PAGE_SIZE = 15;
     private static final int[] PAGE_SIZES = {5, 10, 20};
     private final RequestRepository repository;
     private final RubricService rubricService;
@@ -43,27 +43,14 @@ public class RequestService {
     private final ComputerWithAccessService computerWithAccessService;
 
     public ModelAndView request(
-            Optional<Integer> page,
-            Integer id,
-            Integer outNumber,
-            Integer smav,
-            String subject,
-            String answer,
-            String executor,
-            String executeDateFrom,
-            String executeDateTo,
-            String inNumFromOrg,
-            Boolean caseIns,
+            RequestFilter filter,
             String initiator,
             String shipment,
-            HttpServletRequest servletRequest
+            String remoteAddr,
+            Pageable pageable
     ) {
-        int evalPageSize = 1;
-        int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
-        Pageable pageable = PageRequest.of(evalPage, evalPageSize, Sort.by("id").descending());
-        RequestFilter filter = new RequestFilter(id, outNumber, smav, subject, answer, executor, executeDateFrom, executeDateTo, inNumFromOrg, caseIns, initiator, shipment);
         Page<Request> requests;
-        if (computerWithAccessService.getWhitelistOfIps().contains(servletRequest.getRemoteAddr()) && initiator != null && shipment != null) {
+        if (computerWithAccessService.getWhitelistOfIps().contains(remoteAddr) && initiator != null && shipment != null) {
             if (!initiator.equals("") || !shipment.equals("")) {
                 requests = requestWithPersonalService.getByFilterAndPersonal(filter, pageable);
             } else {
@@ -72,12 +59,12 @@ public class RequestService {
         } else {
             requests = getByFilter(filter, pageable);
         }
-        Page<RequestDto> requestsDto = new PageImpl<>(requests.get().map(requestMapper::convertToDto).collect(Collectors.toList()), pageable, requests.getTotalElements());
+        Page<RequestDto> requestsDto = new PageImpl<>(requests.get().map(requestMapper::convertToDto).toList(), pageable, requests.getTotalElements());
         Pager pager = new Pager(requests.getTotalPages(), requests.getNumber(), BUTTONS_TO_SHOW);
         ModelAndView modelAndView = new ModelAndView("request");
         modelAndView.addObject("filter", filter);
         modelAndView.addObject("requests", requestsDto);
-        modelAndView.addObject("selectedPageSize", evalPageSize);
+        modelAndView.addObject("selectedPageSize", pageable.getPageSize());
         modelAndView.addObject("pageSizes", PAGE_SIZES);
         modelAndView.addObject("pager", pager);
         modelAndView.addObject("rubrics", rubricService.getAll());
@@ -85,8 +72,8 @@ public class RequestService {
         modelAndView.addObject("sources", sourceService.getAll());
         modelAndView.addObject("executors", executorService.getAll());
         modelAndView.addObject("payments", paymentService.getAll());
-        log.info(servletRequest.getRemoteAddr());
-        if (computerWithAccessService.getWhitelistOfIps().contains(servletRequest.getRemoteAddr())) {
+        log.info(remoteAddr);
+        if (computerWithAccessService.getWhitelistOfIps().contains(remoteAddr)) {
             int requestId = requestsDto.getContent().get(0).getId();
             PersonalData personalData = personalDataService.getById(requestId) == null ?
                     new PersonalData()
@@ -97,13 +84,15 @@ public class RequestService {
         return modelAndView;
     }
 
-    public ModelAndView requests(Optional<Integer> page, Integer id, Integer outNumber, Integer smav, String subject, String answer, String executor, String executeDateFrom, String executeDateTo, String inNumFromOrg, Boolean caseIns, String initiator, String shipment, HttpServletRequest servletRequest) {
-        int evalPageSize = INITIAL_PAGE_SIZE;
-        int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
-        Pageable pageable = PageRequest.of(evalPage, evalPageSize, Sort.by("id").descending());
-        RequestFilter filter = new RequestFilter(id, outNumber, smav, subject, answer, executor, executeDateFrom, executeDateTo, inNumFromOrg, caseIns, initiator, shipment);
+    public ModelAndView requests(
+            RequestFilter filter,
+            String initiator,
+            String shipment,
+            String remoteAddr,
+            Pageable pageable
+    ) {
         Page<Request> requests;
-        if (computerWithAccessService.getWhitelistOfIps().contains(servletRequest.getRemoteAddr()) && initiator != null && shipment != null) {
+        if (computerWithAccessService.getWhitelistOfIps().contains(remoteAddr) && initiator != null && shipment != null) {
             if (!initiator.equals("") || !shipment.equals("")) {
                 requests = requestWithPersonalService.getByFilterAndPersonal(filter, pageable);
             } else {
@@ -112,12 +101,12 @@ public class RequestService {
         } else {
             requests = getByFilter(filter, pageable);
         }
-        Page<RequestDto> requestsDto = new PageImpl<>(requests.get().map(requestMapper::convertToDto).collect(Collectors.toList()), pageable, requests.getTotalElements());
+        Page<RequestDto> requestsDto = new PageImpl<>(requests.get().map(requestMapper::convertToDto).toList(), pageable, requests.getTotalElements());
         Pager pager = new Pager(requests.getTotalPages(), requests.getNumber(), BUTTONS_TO_SHOW);
         ModelAndView modelAndView = new ModelAndView(requests.getTotalElements() == 1 ? "forward:/request" : "requests");
         modelAndView.addObject("filter", filter);
         modelAndView.addObject("requests", requestsDto);
-        modelAndView.addObject("selectedPageSize", evalPageSize);
+        modelAndView.addObject("selectedPageSize", pageable.getPageSize());
         modelAndView.addObject("pageSizes", PAGE_SIZES);
         modelAndView.addObject("pager", pager);
         modelAndView.addObject("themes", themeService.getAll());
@@ -179,7 +168,7 @@ public class RequestService {
         if (getEndDate(request, personalData, servletRequest, redirectAttributes)) {
             return "redirect:" + servletRequest.getHeader("Referer");
         }
-        if (personalData.getRequestInitiator().equals("")) {
+        if ("".equals(personalData.getRequestInitiator())) {
             redirectAttributes.addFlashAttribute("action", "Не задан инициатор");
             return "redirect:" + servletRequest.getHeader("Referer");
 

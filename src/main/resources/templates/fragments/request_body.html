@@ -44,7 +44,7 @@
                 <div class="col-2">
                     <div class="form-group">
                         <label for="formReceiptDateInput">Дата получения</label>
-                        <input type="text" data-provide="datepicker" class="form-control datepicker" id="formReceiptDateInput" name="receiptDate"
+                        <input type="date" class="form-control" id="formReceiptDateInput" name="receiptDate"
                                th:value="${request.getReceiptDate()}">
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                 <div class="col-2">
                     <div class="form-group">
                         <label for="formStartDateInput">Дата начала</label>
-                        <input type="text" data-provide="datepicker" class="form-control datepicker" id="formStartDateInput" name="startDate"
+                        <input type="date" class="form-control" id="formStartDateInput" name="startDate"
                                th:value="${request.getStartDate()}">
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                 <div class="col-2">
                     <div class="form-group">
                         <label for="formEndDateInput">Дата исполнения</label>
-                        <input type="text" data-provide="datepicker" class="form-control datepicker" id="formEndDateInput" name="endDate"
+                        <input type="date" class="form-control" id="formEndDateInput" name="endDate"
                                th:value="${request.getEndDate()}">
                     </div>
                 </div>
@@ -181,7 +181,7 @@
                 <div class="col-2">
                     <div class="form-group">
                         <label for="formInDateInput">от</label>
-                        <input type="text" data-provide="datepicker" class="form-control datepicker" id="formInDateInput" name="inDate"
+                        <input type="date" class="form-control" id="formInDateInput" name="inDate"
                                th:value="${request.getInDate()}">
                     </div>
                 </div>
@@ -234,6 +234,9 @@
                     <button type="reset" name="reset" class="btn btn-secondary">Отменить</button>
                     <button type="submit" name="save" class="btn btn-primary">Сохранить</button>
                 </div>
+            </div>
+            <div class="alert alert-success" role="alert" th:hidden="${action == null}">
+                Изменения сохранены
             </div>
         </form>
     </div>

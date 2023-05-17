@@ -6,31 +6,5 @@
 <div th:replace="fragments/request_body :: requestBody"></div>
 <div th:replace="fragments/pager :: pager"></div>
 <div th:replace="fragments/footer :: footer"></div>
-<script th:inline="javascript">
-    $(document).ready(function () {
-        var action = /*[[${action}]]*/ "";
-        if (action !== null) alert(action)
-    });
-</script>
-
-<script th:inline="javascript">
-    $.fn.datepicker.dates['ru'] = {
-        days: ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
-        daysShort: ["Вск", "Пнд", "Втр", "Срд", "Чтв", "Птн", "Суб"],
-        daysMin: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
-        months: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
-        monthsShort: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
-        today: "Сегодня",
-        clear: "Очистить",
-        format: "yyyy-mm-dd",
-        titleFormat: "MM yyyy", /* Leverages same syntax as 'format' */
-        weekStart: 1,
-    };
-    $('.datepicker').datepicker({
-        language: "ru",
-        todayBtn: "linked",
-        clearBtn: true
-    });
-</script>
 </body>
 </html>
